@@ -40,8 +40,8 @@
 // STM32-E407 definitions (the GREEN led, C13, active low)
 
 // Port numbers: 0=A, 1=B, 2=C, 3=D, 4=E, 5=F, 6=G, ...
-#define BLINK_PORT_NUMBER               (0)
-#define BLINK_PIN_NUMBER                (5)
+#define BLINK_PORT_NUMBER               (1)
+#define BLINK_PIN_NUMBER                (13)
 #define BLINK_ACTIVE_LOW                (1)
 
 #else
