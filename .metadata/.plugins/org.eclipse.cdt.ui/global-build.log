@@ -1,8 +1,22 @@
-16:50:10 **** Incremental Build of configuration Debug for project button-blinky-interrupt ****
+20:23:38 **** Incremental Build of configuration Debug for project buttons-blinky-interrupt-priority-demo ****
 make all 
+Building file: ../src/main.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/main.d" -MT"src/main.o" -c -o "src/main.o" "../src/main.c"
+Finished building: ../src/main.c
+ 
+Building target: buttons-blinky-interrupt-priority-demo.elf
+Invoking: GNU ARM Cross C++ Linker
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"buttons-blinky-interrupt-priority-demo.map" --specs=nano.specs -o "buttons-blinky-interrupt-priority-demo.elf"  ./system/src/stm32f4xx/stm32f4xx_hal.o ./system/src/stm32f4xx/stm32f4xx_hal_cortex.o ./system/src/stm32f4xx/stm32f4xx_hal_dma.o ./system/src/stm32f4xx/stm32f4xx_hal_dma_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_exti.o ./system/src/stm32f4xx/stm32f4xx_hal_flash.o ./system/src/stm32f4xx/stm32f4xx_hal_flash_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_flash_ramfunc.o ./system/src/stm32f4xx/stm32f4xx_hal_gpio.o ./system/src/stm32f4xx/stm32f4xx_hal_pwr.o ./system/src/stm32f4xx/stm32f4xx_hal_pwr_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_rcc.o ./system/src/stm32f4xx/stm32f4xx_hal_rcc_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_tim.o ./system/src/stm32f4xx/stm32f4xx_hal_tim_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_uart.o  ./system/src/newlib/_cxx.o ./system/src/newlib/_exit.o ./system/src/newlib/_startup.o ./system/src/newlib/_syscalls.o ./system/src/newlib/assert.o  ./system/src/diag/Trace.o ./system/src/diag/trace_impl.o  ./system/src/cortexm/_initialize_hardware.o ./system/src/cortexm/_reset_hardware.o ./system/src/cortexm/exception_handlers.o  ./system/src/cmsis/startup_stm32f446xx.o  ./src/_write.o ./src/main.o ./src/stm32f4xx_hal_msp.o ./src/stm32f4xx_it.o ./src/syscalls.o ./src/system_stm32f4xx.o   
+Finished building target: buttons-blinky-interrupt-priority-demo.elf
+ 
+Invoking: GNU ARM Cross Create Flash Image
+arm-none-eabi-objcopy -O ihex "buttons-blinky-interrupt-priority-demo.elf"  "buttons-blinky-interrupt-priority-demo.hex"
+Finished building: buttons-blinky-interrupt-priority-demo.hex
+ 
 Invoking: GNU ARM Cross Print Size
-arm-none-eabi-size --format=berkeley "button-blinky-interrupt.elf"
+arm-none-eabi-size --format=berkeley "buttons-blinky-interrupt-priority-demo.elf"
    text	   data	    bss	    dec	    hex	filename
-   9067	    168	    484	   9719	   25f7	button-blinky-interrupt.elf
-Finished building: button-blinky-interrupt.siz
+   9323	    168	    488	   9979	   26fb	buttons-blinky-interrupt-priority-demo.elf
+Finished building: buttons-blinky-interrupt-priority-demo.siz
  

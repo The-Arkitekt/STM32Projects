@@ -42,15 +42,15 @@
  UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+uint8_t blink = 0;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+void Init_Interrupts(void);
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-void EXTI15_10_IRQHandler(void);
-void HAL_GPIO_EXTI_Callback(uint16_t);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -89,9 +89,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
-
   /* USER CODE BEGIN 2 */
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  Init_Interrupts();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,18 +99,45 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  if (blink)
+	  {
+		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+		  for (int i = 0; i < 100000; i++);
+	  }
 
     /* USER CODE BEGIN 3 */
-
   }
   /* USER CODE END 3 */
 }
 
-void EXTI15_10_IRQHandler(void){
-	HAL_GPIO_EXTI_IRQHandler(B1_Pin);
+void Init_Interrupts(void)
+{
+	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_1);
+	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0, 0);
 }
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+
+void EXTI15_10_IRQHandler(void)
+{
+	HAL_GPIO_EXTI_IRQHandler(B1_Pin);
+	HAL_GPIO_EXTI_IRQHandler(B2_Pin);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN)
+{
+	if(GPIO_PIN == B1_Pin)
+		blink = 1;
+	else if (GPIO_PIN == B2_Pin)
+		blink = 0;
 }
 
 /**
@@ -212,15 +239,20 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Pin  = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pin  = B2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LD2_Pin */
+  GPIO_InitStruct.Pin   = LD2_Pin;
+  GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull  = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
