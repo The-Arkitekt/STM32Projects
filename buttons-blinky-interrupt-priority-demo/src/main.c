@@ -39,7 +39,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t blink = 0;
@@ -121,7 +121,6 @@ int main(void)
 
 void Init_Interrupts(void)
 {
-	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_1);
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x0, 0);
 }

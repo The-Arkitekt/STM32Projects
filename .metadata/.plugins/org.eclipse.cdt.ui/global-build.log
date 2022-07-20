@@ -1,22 +1,129 @@
-20:23:38 **** Incremental Build of configuration Debug for project buttons-blinky-interrupt-priority-demo ****
+13:37:49 **** Incremental Build of configuration Debug for project pwm-demo ****
 make all 
+Building file: ../src/_write.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/_write.d" -MT"src/_write.o" -c -o "src/_write.o" "../src/_write.c"
+Finished building: ../src/_write.c
+ 
 Building file: ../src/main.c
 Invoking: GNU ARM Cross C Compiler
 arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/main.d" -MT"src/main.o" -c -o "src/main.o" "../src/main.c"
 Finished building: ../src/main.c
  
-Building target: buttons-blinky-interrupt-priority-demo.elf
+Building file: ../src/nucleo_hal_bsp.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/nucleo_hal_bsp.d" -MT"src/nucleo_hal_bsp.o" -c -o "src/nucleo_hal_bsp.o" "../src/nucleo_hal_bsp.c"
+Finished building: ../src/nucleo_hal_bsp.c
+ 
+Building file: ../src/stm32f4xx_hal_msp.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/stm32f4xx_hal_msp.d" -MT"src/stm32f4xx_hal_msp.o" -c -o "src/stm32f4xx_hal_msp.o" "../src/stm32f4xx_hal_msp.c"
+Finished building: ../src/stm32f4xx_hal_msp.c
+ 
+Building file: ../src/stm32f4xx_it.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/stm32f4xx_it.d" -MT"src/stm32f4xx_it.o" -c -o "src/stm32f4xx_it.o" "../src/stm32f4xx_it.c"
+Finished building: ../src/stm32f4xx_it.c
+ 
+Building file: ../src/syscalls.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/syscalls.d" -MT"src/syscalls.o" -c -o "src/syscalls.o" "../src/syscalls.c"
+../src/syscalls.c: In function '_kill':
+../src/syscalls.c:82:15: warning: unused parameter 'pid' [-Wunused-parameter]
+   82 | int _kill(int pid, int sig)
+      |           ~~~~^~~
+../src/syscalls.c:82:24: warning: unused parameter 'sig' [-Wunused-parameter]
+   82 | int _kill(int pid, int sig)
+      |                    ~~~~^~~
+../src/syscalls.c: In function '_read':
+../src/syscalls.c:94:37: warning: unused parameter 'file' [-Wunused-parameter]
+   94 | __attribute__((weak)) int _read(int file, char *ptr, int len)
+      |                                 ~~~~^~~~
+../src/syscalls.c: In function '_write':
+../src/syscalls.c:106:38: warning: unused parameter 'file' [-Wunused-parameter]
+  106 | __attribute__((weak)) int _write(int file, char *ptr, int len)
+      |                                  ~~~~^~~~
+../src/syscalls.c: In function '_close':
+../src/syscalls.c:140:16: warning: unused parameter 'file' [-Wunused-parameter]
+  140 | int _close(int file)
+      |            ~~~~^~~~
+../src/syscalls.c: In function '_fstat':
+../src/syscalls.c:146:16: warning: unused parameter 'file' [-Wunused-parameter]
+  146 | int _fstat(int file, struct stat *st)
+      |            ~~~~^~~~
+../src/syscalls.c: In function '_isatty':
+../src/syscalls.c:152:17: warning: unused parameter 'file' [-Wunused-parameter]
+  152 | int _isatty(int file)
+      |             ~~~~^~~~
+../src/syscalls.c: In function '_lseek':
+../src/syscalls.c:157:16: warning: unused parameter 'file' [-Wunused-parameter]
+  157 | int _lseek(int file, int ptr, int dir)
+      |            ~~~~^~~~
+../src/syscalls.c:157:26: warning: unused parameter 'ptr' [-Wunused-parameter]
+  157 | int _lseek(int file, int ptr, int dir)
+      |                      ~~~~^~~
+../src/syscalls.c:157:35: warning: unused parameter 'dir' [-Wunused-parameter]
+  157 | int _lseek(int file, int ptr, int dir)
+      |                               ~~~~^~~
+../src/syscalls.c: In function '_open':
+../src/syscalls.c:162:17: warning: unused parameter 'path' [-Wunused-parameter]
+  162 | int _open(char *path, int flags, ...)
+      |           ~~~~~~^~~~
+../src/syscalls.c:162:27: warning: unused parameter 'flags' [-Wunused-parameter]
+  162 | int _open(char *path, int flags, ...)
+      |                       ~~~~^~~~~
+../src/syscalls.c: In function '_wait':
+../src/syscalls.c:168:16: warning: unused parameter 'status' [-Wunused-parameter]
+  168 | int _wait(int *status)
+      |           ~~~~~^~~~~~
+../src/syscalls.c: In function '_unlink':
+../src/syscalls.c:174:19: warning: unused parameter 'name' [-Wunused-parameter]
+  174 | int _unlink(char *name)
+      |             ~~~~~~^~~~
+../src/syscalls.c: In function '_times':
+../src/syscalls.c:180:24: warning: unused parameter 'buf' [-Wunused-parameter]
+  180 | int _times(struct tms *buf)
+      |            ~~~~~~~~~~~~^~~
+../src/syscalls.c: In function '_stat':
+../src/syscalls.c:185:17: warning: unused parameter 'file' [-Wunused-parameter]
+  185 | int _stat(char *file, struct stat *st)
+      |           ~~~~~~^~~~
+../src/syscalls.c: In function '_link':
+../src/syscalls.c:191:17: warning: unused parameter 'old' [-Wunused-parameter]
+  191 | int _link(char *old, char *new)
+      |           ~~~~~~^~~
+../src/syscalls.c:191:28: warning: unused parameter 'new' [-Wunused-parameter]
+  191 | int _link(char *old, char *new)
+      |                      ~~~~~~^~~
+../src/syscalls.c: In function '_execve':
+../src/syscalls.c:203:19: warning: unused parameter 'name' [-Wunused-parameter]
+  203 | int _execve(char *name, char **argv, char **env)
+      |             ~~~~~~^~~~
+../src/syscalls.c:203:32: warning: unused parameter 'argv' [-Wunused-parameter]
+  203 | int _execve(char *name, char **argv, char **env)
+      |                         ~~~~~~~^~~~
+../src/syscalls.c:203:45: warning: unused parameter 'env' [-Wunused-parameter]
+  203 | int _execve(char *name, char **argv, char **env)
+      |                                      ~~~~~~~^~~
+Finished building: ../src/syscalls.c
+ 
+Building file: ../src/system_stm32f4xx.c
+Invoking: GNU ARM Cross C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/system_stm32f4xx.d" -MT"src/system_stm32f4xx.o" -c -o "src/system_stm32f4xx.o" "../src/system_stm32f4xx.c"
+Finished building: ../src/system_stm32f4xx.c
+ 
+Building target: pwm-demo.elf
 Invoking: GNU ARM Cross C++ Linker
-arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"buttons-blinky-interrupt-priority-demo.map" --specs=nano.specs -o "buttons-blinky-interrupt-priority-demo.elf"  ./system/src/stm32f4xx/stm32f4xx_hal.o ./system/src/stm32f4xx/stm32f4xx_hal_cortex.o ./system/src/stm32f4xx/stm32f4xx_hal_dma.o ./system/src/stm32f4xx/stm32f4xx_hal_dma_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_exti.o ./system/src/stm32f4xx/stm32f4xx_hal_flash.o ./system/src/stm32f4xx/stm32f4xx_hal_flash_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_flash_ramfunc.o ./system/src/stm32f4xx/stm32f4xx_hal_gpio.o ./system/src/stm32f4xx/stm32f4xx_hal_pwr.o ./system/src/stm32f4xx/stm32f4xx_hal_pwr_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_rcc.o ./system/src/stm32f4xx/stm32f4xx_hal_rcc_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_tim.o ./system/src/stm32f4xx/stm32f4xx_hal_tim_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_uart.o  ./system/src/newlib/_cxx.o ./system/src/newlib/_exit.o ./system/src/newlib/_startup.o ./system/src/newlib/_syscalls.o ./system/src/newlib/assert.o  ./system/src/diag/Trace.o ./system/src/diag/trace_impl.o  ./system/src/cortexm/_initialize_hardware.o ./system/src/cortexm/_reset_hardware.o ./system/src/cortexm/exception_handlers.o  ./system/src/cmsis/startup_stm32f446xx.o  ./src/_write.o ./src/main.o ./src/stm32f4xx_hal_msp.o ./src/stm32f4xx_it.o ./src/syscalls.o ./src/system_stm32f4xx.o   
-Finished building target: buttons-blinky-interrupt-priority-demo.elf
+arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"pwm-demo.map" --specs=nano.specs -o "pwm-demo.elf"  ./system/src/stm32f4xx/stm32f4xx_hal.o ./system/src/stm32f4xx/stm32f4xx_hal_adc.o ./system/src/stm32f4xx/stm32f4xx_hal_adc_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_cortex.o ./system/src/stm32f4xx/stm32f4xx_hal_crc.o ./system/src/stm32f4xx/stm32f4xx_hal_dac.o ./system/src/stm32f4xx/stm32f4xx_hal_dac_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_dma.o ./system/src/stm32f4xx/stm32f4xx_hal_dma_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_flash.o ./system/src/stm32f4xx/stm32f4xx_hal_flash_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_flash_ramfunc.o ./system/src/stm32f4xx/stm32f4xx_hal_gpio.o ./system/src/stm32f4xx/stm32f4xx_hal_i2c.o ./system/src/stm32f4xx/stm32f4xx_hal_i2c_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_pwr.o ./system/src/stm32f4xx/stm32f4xx_hal_pwr_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_rcc.o ./system/src/stm32f4xx/stm32f4xx_hal_rcc_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_spi.o ./system/src/stm32f4xx/stm32f4xx_hal_tim.o ./system/src/stm32f4xx/stm32f4xx_hal_tim_ex.o ./system/src/stm32f4xx/stm32f4xx_hal_uart.o  ./system/src/newlib/_cxx.o ./system/src/newlib/_exit.o ./system/src/newlib/_startup.o ./system/src/newlib/_syscalls.o ./system/src/newlib/assert.o  ./system/src/diag/Trace.o ./system/src/diag/trace_impl.o  ./system/src/cortexm/_initialize_hardware.o ./system/src/cortexm/_reset_hardware.o ./system/src/cortexm/exception_handlers.o  ./system/src/cmsis/startup_stm32f446xx.o  ./src/_write.o ./src/main.o ./src/nucleo_hal_bsp.o ./src/stm32f4xx_hal_msp.o ./src/stm32f4xx_it.o ./src/syscalls.o ./src/system_stm32f4xx.o   
+Finished building target: pwm-demo.elf
  
 Invoking: GNU ARM Cross Create Flash Image
-arm-none-eabi-objcopy -O ihex "buttons-blinky-interrupt-priority-demo.elf"  "buttons-blinky-interrupt-priority-demo.hex"
-Finished building: buttons-blinky-interrupt-priority-demo.hex
+arm-none-eabi-objcopy -O ihex "pwm-demo.elf"  "pwm-demo.hex"
+Finished building: pwm-demo.hex
  
 Invoking: GNU ARM Cross Print Size
-arm-none-eabi-size --format=berkeley "buttons-blinky-interrupt-priority-demo.elf"
+arm-none-eabi-size --format=berkeley "pwm-demo.elf"
    text	   data	    bss	    dec	    hex	filename
-   9323	    168	    488	   9979	   26fb	buttons-blinky-interrupt-priority-demo.elf
-Finished building: buttons-blinky-interrupt-priority-demo.siz
+  10555	    160	    540	  11255	   2bf7	pwm-demo.elf
+Finished building: pwm-demo.siz
  
