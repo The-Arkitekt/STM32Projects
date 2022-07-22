@@ -18,7 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include <stdlib.h>
+#include <string.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -31,6 +32,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define WELCOME_MSG "Welcome to the Nucleo management console\r\n"
+#define MAIN_MENU   "Select the option you are interested in:\r\n\t1. Toggle LD2 LED\r\n\t2. Read USER BUTTON status\r\n\t3. Clear screen and print this message "
+#define PROMPT "\r\n> "
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -39,16 +43,21 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- TIM_HandleTypeDef htim4;
-
+TIM_HandleTypeDef htim4;
+UART_HandleTypeDef huart2;
+char readBuf[1];
+__IO ITStatus UartReady = SET;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void printWelcomeMessage(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_USART2_UART_Init(void);
+int8_t readUserInput(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -87,6 +96,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM4_Init();
+  MX_USART2_UART_Init();
+
+  /* Enable USART2 interrupt */
+  HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN 2 */
 
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
@@ -96,25 +110,59 @@ int main(void)
 
   uint16_t maxDuty = __HAL_TIM_GET_AUTORELOAD(&htim4) - 1;
 
-  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, maxDuty/1);
-  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, maxDuty/2);
-  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, maxDuty/4);
-  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, maxDuty/8);
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 0);
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 0);
 
-
-  /* TESTING */
-
-
+  uint8_t userInput = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  printWelcomeMessage();
+
   while (1)
   {
-
+	   userInput = readUserInput();
+	   if (userInput > 0 && userInput < maxDuty) {
+		   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, userInput);
+		   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, userInput);
+		   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, userInput);
+		   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, userInput);
+	   }
     /* USER CODE BEGIN 3 */
+	   HAL_Delay(100);
   }
   /* USER CODE END 3 */
+}
+
+/* get duty cycle from user */
+int8_t readUserInput(void) {
+  int8_t retVal = -1;
+
+  if(UartReady == SET) {
+    UartReady = RESET;
+    HAL_UART_Receive_IT(&huart2, (uint8_t*)readBuf, 1);
+    retVal = atoi(readBuf);
+  }
+  return retVal;
+}
+
+/* ISR callback */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle) {
+ /* Set transmission flag: transfer complete*/
+ UartReady = SET;
+}
+
+void printWelcomeMessage(void) {
+  char *strings[] = {"\033[0;0H", "\033[2J", WELCOME_MSG, MAIN_MENU, PROMPT};
+
+  for (uint8_t i = 0; i < 5; i++) {
+    HAL_UART_Transmit_IT(&huart2, (uint8_t*)strings[i], strlen(strings[i]));
+    while (HAL_UART_GetState(&huart2) == HAL_UART_STATE_BUSY_TX || HAL_UART_GetState(&huart2) == HAL_UART_STATE_BUSY_TX_RX);
+  }
 }
 
 /**
@@ -156,6 +204,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+
+  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+
+  /* SysTick_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
 /**
@@ -229,6 +284,21 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
+}
+
+/* USART2 init function */
+void MX_USART2_UART_Init(void)
+{
+
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 38400;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  HAL_UART_Init(&huart2);
 }
 
 /* USER CODE BEGIN 4 */
