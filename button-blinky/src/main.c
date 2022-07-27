@@ -24,8 +24,9 @@ extern void MX_USART2_UART_Init(void);
 static void MX_TIM4_Init(void);
 void performCriticalTasks(void);
 void printWelcomeMessage(void);
-void transmitResponse(uint16_t);
-uint16_t processUserInput(int8_t, uint16_t);
+void transmitResponse(uint8_t);
+void transmitString(char *);
+uint16_t processUserInput(int8_t, uint16_t, uint16_t);
 int8_t readByte(void);
 
 int main(void) {
@@ -60,39 +61,44 @@ int main(void) {
   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, dutyCycle);
   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, dutyCycle);
 
-
+  /* set motor to forward state*/
+  HAL_GPIO_WritePin(Forward_Reverse_GPIO_Port, Forward_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(Forward_Reverse_GPIO_Port, Reverse_Pin, GPIO_PIN_RESET);
 
 
 	printWelcomeMessage();
 
-	char digit[1];
 	int8_t opt = -1;
-	uint8_t i = 0;
 	uint16_t tmpDuty = dutyCycle;
-	uint8_t isFirstIter = 1;
+	char msg[30];
+
 	while (1)  {
-		if (i >= 3) {
-			i = 0;
-			transmitResponse(tmpDuty);
-			dutyCycle = tmpDuty;
-			if (dutyCycle <= maxDuty) {
-				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, dutyCycle);
-				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, dutyCycle);
-				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, dutyCycle);
-				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, dutyCycle);
-			}
-			tmpDuty = 0;
-		}
+		tmpDuty = dutyCycle;
 		opt = readByte();
 		if (opt > -1) {
-			if (isFirstIter == 1) {
-				isFirstIter = 0;
-				continue;
+			tmpDuty = processUserInput(opt, dutyCycle, maxDuty);
+
+		}
+		else if (tmpDuty == dutyCycle){
+			if ((tmpDuty - 25) > 0) {
+				tmpDuty = dutyCycle - 25;
+
+				sprintf(msg, "Reducing speed, dutyCycle: %d", tmpDuty);
+				transmitString(msg);
 			}
-			i++;
-			tmpDuty = processUserInput(opt, tmpDuty);
-			sprintf(digit, "%d", opt);
-			HAL_UART_Transmit(&huart2, (uint8_t*)digit, strlen(digit), HAL_MAX_DELAY);
+			else {
+				tmpDuty = 0;
+				sprintf(msg, "minimum speed, dutyCycle: %d", tmpDuty);
+				transmitString(msg);
+			}
+
+		}
+		if (tmpDuty != dutyCycle) {
+			dutyCycle = tmpDuty;
+			__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, dutyCycle);
+			__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, dutyCycle);
+			__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, dutyCycle);
+			__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, dutyCycle);
 		}
 
 		performCriticalTasks();
@@ -106,30 +112,73 @@ int8_t readByte(void) {
     UartReady = RESET;
     HAL_UART_Receive_IT(&huart2, (uint8_t*)readBuf, 1);
 
-    retVal = atoi(readBuf);
+    retVal = (int8_t)readBuf[0];
   }
   return retVal;
 }
 
 
-uint16_t processUserInput(int8_t opt, uint16_t duty) {
+uint16_t processUserInput(int8_t opt, uint16_t duty, uint16_t maxDuty) {
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	HAL_Delay(5);
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 
+    transmitResponse(opt);
 
-	duty *= 10;
-	duty += (uint16_t)opt;
+    if(!(opt == 'w' || opt == 's')) {
+      return duty;
+    }
+    char msg[30];
+
+    switch(opt) {
+    case 'w':
+    	HAL_GPIO_WritePin(Forward_Reverse_GPIO_Port, Forward_Pin, GPIO_PIN_SET);
+    	HAL_GPIO_WritePin(Forward_Reverse_GPIO_Port, Reverse_Pin, GPIO_PIN_RESET);
+
+    	if ((duty + 25) <= maxDuty) {
+    		duty += 25;
+    		sprintf(msg, "Increasing forward speed, dutyCycle: %d", duty);
+    		transmitString(msg);
+    	}
+    	else {
+    		duty = maxDuty;
+			sprintf(msg, "Max Forward speed, dutyCycle: %d", duty);
+			transmitString(msg);
+		}
+    	break;
+
+    case 's':
+    	HAL_GPIO_WritePin(Forward_Reverse_GPIO_Port, Forward_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(Forward_Reverse_GPIO_Port, Reverse_Pin, GPIO_PIN_SET);
+
+		if ((duty + 25) <= maxDuty) {
+			duty += 25;
+			sprintf(msg, "Increasing reverse speed, dutyCycle: %d", duty);
+			transmitString(msg);
+		}
+		else {
+			duty = maxDuty;
+			sprintf(msg, "Max reverse speed, dutyCycle: %d", duty);
+			transmitString(msg);
+		}
+		break;
+
+    default:
+    	break;
+    }
 
 	return duty;
 }
-void transmitResponse(uint16_t resp){
+void transmitResponse(uint8_t resp){
 	char msg[30];
-	sprintf(msg, "\nYou entered duty cycle: %d", resp);
+	sprintf(msg, "\nYou entered: %c", resp);
+	transmitString(msg);
+}
+
+void transmitString(char * msg) {
 	HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 	HAL_UART_Transmit(&huart2, (uint8_t*)PROMPT, strlen(PROMPT), HAL_MAX_DELAY);
 }
-
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle) {
  /* Set transmission flag: transfer complete*/
@@ -228,6 +277,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : Forward_Pin | Reverse_Pin */
+  GPIO_InitStruct.Pin   = Forward_Pin | Reverse_Pin;
+  GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull  = GPIO_PULLDOWN;
+  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+  HAL_GPIO_Init(Forward_Reverse_GPIO_Port, &GPIO_InitStruct);
+
+
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0x1, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
@@ -248,7 +305,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 499;
+  htim4.Init.Prescaler = 999;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV4;

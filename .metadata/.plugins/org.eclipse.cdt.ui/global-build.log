@@ -1,11 +1,11 @@
-19:04:05 **** Incremental Build of configuration Debug for project button-blinky ****
+12:47:34 **** Incremental Build of configuration Debug for project button-blinky ****
 make all 
 Building file: ../src/main.c
 Invoking: GNU ARM Cross C Compiler
 arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DSTM32F446xE -DDEBUG -DTRACE -I"../include" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4xx" -std=gnu11 -MMD -MP -MF"src/main.d" -MT"src/main.o" -c -o "src/main.o" "../src/main.c"
 ../src/main.c: In function 'HAL_UART_RxCpltCallback':
-../src/main.c:134:50: warning: unused parameter 'UartHandle' [-Wunused-parameter]
-  134 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle) {
+../src/main.c:183:50: warning: unused parameter 'UartHandle' [-Wunused-parameter]
+  183 | void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle) {
       |                              ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
 Finished building: ../src/main.c
  
@@ -21,6 +21,6 @@ Finished building: button-blinky.hex
 Invoking: GNU ARM Cross Print Size
 arm-none-eabi-size --format=berkeley "button-blinky.elf"
    text	   data	    bss	    dec	    hex	filename
-  13816	    172	    560	  14548	   38d4	button-blinky.elf
+  13699	    172	    560	  14431	   385f	button-blinky.elf
 Finished building: button-blinky.siz
  
